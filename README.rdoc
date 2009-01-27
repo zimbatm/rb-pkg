@@ -16,3 +16,9 @@ Cheers,
 
 * gzip_require: works like require but handles .gz files
 
+== TODO
+
+* Finish YAML VFS
+* Optional shebang in compressor
+* Make a library out of the compressor
+
