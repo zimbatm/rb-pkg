@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+# 
+# Ruby packager: creates a bundle or ruby scripts and resources
+# 
+
+
+HEADER = '
+require "tmpdir"
+require "fileutils"
+require "yaml"
+class File
+  f = __FILE__
+  p = join Dir.tmpdir, f + ".unpack"
+  FileUtils.rm_rf p
+  YAML.load(read(f).gsub(/.*\n__END__\n/m,"")).each_pair do |k,v|
+    q=join(p,k)
+    FileUtils.mkdir_p dirname(q)
+    open(q,"w"){|x|x<<v}
+  end
+end
+__END__
+'
+require 'yaml'
+
+files = {}
+
+def rec_add(hash, files)
+  files.each do |f|
+    if File.directory?(f)
+      rec_add(hash, Dir[File.join(f, '*')])
+    else
+      hash[f] = File.read(f)
+    end
+  end
+end
+
+rec_add(files, ARGV)
+
+File.open('moo.rb','w') do |f|
+  f.write HEADER
+  f.write YAML.dump(files) 
+end
+
