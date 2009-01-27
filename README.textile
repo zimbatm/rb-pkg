@@ -1,0 +1,18 @@
+= Ruby-packaging
+
+Ruby-packaging is a set of separate tools, in the UNIX fashion, that operate
+on ruby files for distribution.
+
+NOTE: this is alpha stage, for my own fun
+
+Cheers,
+  zimbatm
+
+== Provided apps
+
+* rb-compress: a command-line that creates self-extractible SINGLE ruby files.
+
+== Provided libs
+
+* gzip_require: works like require but handles .gz files
+

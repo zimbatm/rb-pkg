@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+require 'zlib'
+require 'optparse'
+require 'ostruct'
+
+HEADER = '#!/usr/bin/env ruby
+require"zlib";require"tmpdir";class File;f=__FILE__;d=read(f).gsub /.*\n__END__\n/m,"";p=join Dir.tmpdir,basename(f);open(p,"w"){|f|f<<Zlib::Inflate.inflate(d)};load p end
+__END__
+'
+
+# TODO: make shebang optional : [yes, no, detect]
+
+conf = OpenStruct.new
+conf.level = 9
+
+opts = OptionParser.new do |opts|
+  opts.banner = "Usage: #{File.basename($0)} <SRC> <DST>"
+
+  opts.separator ""
+  opts.separator "Creates a self-extractable ruby archive by gzipping and"
+  opts.separator "adding a #{HEADER.size} bytes header"
+  opts.separator "-------------------------------------------------------"
+
+  opts.on("-l", "--level LEVEL", (0..9).to_a, "Gzip compression level from 0 to 9. Default: #{conf.level}"){|conf.level|}
+
+  opts.on("-h", "--help", "Shows this text"){puts opts; exit}
+end
+
+begin
+  opts.parse!
+rescue OptionParser::ParseError => ex
+  STDERR.puts "Error: #{ex.message}"
+  STDERR.puts opts
+  exit 1
+end
+
+if ARGV.size < 1
+  STDERR.puts "Error: No source given"
+  STDERR.puts opts
+  exit 1
+end
+
+if ARGV.size < 2
+  STDERR.puts "Error: No destination given"
+  STDERR.puts opts
+  exit 1
+end
+
+SRC = ARGV[0]
+DST = ARGV[1]
+
+begin
+  data = File.read SRC
+rescue => ex
+  STDERR.puts ex.inspect
+  exit 1
+end
+
+# All this for that !
+File.open(DST, 'w+') do |dst|
+  dst.write HEADER
+  dst.write Zlib::Deflate.deflate( data, conf.level )
+end
+
+STDERR.puts "File compressed from #{File.size(SRC)} to #{File.size(DST)} bytes"
+
