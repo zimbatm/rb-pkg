@@ -1,0 +1,27 @@
+This is the current conventions used by setup.rb
+
+PackageTop/
+    setup.rb
+    lib/
+        (ruby scripts)
+    ext/
+        (ruby extentions)
+    bin/
+        (commands)
+    data/
+        (data files)
+    conf/
+        (configuration files)
+    man/
+        (manual pages)
+    test/
+        (tests)
+
+
+http://i.loveruby.net/en/projects/setup/doc/devel.html
+
+
+Rails:
+
+   vendor/
+          (external dependencies)
