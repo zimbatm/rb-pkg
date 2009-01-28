@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+# 
+# Ruby compressor
+# 
 require 'zlib'
 require 'optparse'
 require 'ostruct'

@@ -1,0 +1,11 @@
+Things that annoy me in other solutions.
+
+= Rubygems
+
+* Bad distribution integration
+* No user/system install concept
+
+= Setup.rb
+
+* rewriting shebang before installing is annoying
+* big plate of code, some chunks could be put in a library (like python's eggs)
