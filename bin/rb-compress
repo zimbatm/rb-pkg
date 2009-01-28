@@ -43,14 +43,14 @@ if ARGV.size < 1
   exit 1
 end
 
-if ARGV.size < 2
-  STDERR.puts "Error: No destination given"
-  STDERR.puts opts
-  exit 1
-end
-
 SRC = ARGV[0]
-DST = ARGV[1]
+
+DST = if ARGV[1]
+  ARGV[1]
+else
+  ext = File.extname(SRC)
+  File.basename(SRC, ext) + '.gz' + ext
+end
 
 begin
   data = File.read SRC
